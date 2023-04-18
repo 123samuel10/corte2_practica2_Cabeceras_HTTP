@@ -17,61 +17,19 @@ import java.util.Optional;
 
 @WebServlet(name = "ListarProductos",urlPatterns = "/listar")
 public class ListarProductos extends HelloServlet {
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        ListaProductosService auth = new ListaProductosServiceImpl();
-        Optional<String> cookieOptional = auth.getUsername(request);
-        if (cookieOptional.isPresent()) {
-            Cookie usernameCookie = new Cookie("username", "");
-            usernameCookie.setMaxAge(0);
-            response.addCookie(usernameCookie);
-            response.setContentType("text/html;charset=UTF-8");
-            try (PrintWriter out = response.getWriter()) {
-                out.println("<!DOCTYPE html>");
-                out.println("<html>");
-                out.println(" <head>");
-
-                out.println(" <meta charset=\"UTF-8\">");
-                out.println(" <title>Hola " + cookieOptional.get() +
-
-                        "</title>");
-
-                out.println(" </head>");
-                out.println(" <body>");
-                out.println(" <h1>Hola " + cookieOptional.get() + " has iniciado sesión con éxito!</h1>");
-
-                out.println("<p><a href='" + request.getContextPath() +
-
-                        "/index.html'>volver</a></p>");
-
-                out.println("<p><a href='" + request.getContextPath() +
-
-                        "/logout'>cerrar sesión</a></p>");
-                out.println(" </body>");
-                out.println("</html>");
-            }
-        } else {
-            try {
-                getServletContext().getRequestDispatcher("/login.jsp").forward(request,
-                        response);
-            } catch (ServletException e) {
-                throw new RuntimeException(e);
-            }
-
-        }
-    }
 
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String name="samuel";
         String username = req.getParameter("usarname");
+        Cookie usernameCookie = new Cookie("username", username);
+        resp.addCookie(usernameCookie);
+        System.out.printf(String.valueOf(usernameCookie.getValue()));
+        HttpSession session = req.getSession();
+        session.setAttribute("username", username);
+        if (String.valueOf(usernameCookie.getValue()).equals(name)) {
 
-        System.out.printf(username);
-        if (username.equals(name)) {
-            Cookie usernameCookie = new Cookie("username", username);
-            resp.addCookie(usernameCookie);
-            HttpSession session = req.getSession();
-            session.setAttribute("username", username);
             resp.setContentType("text/html;charset=UTF-8");
             try (PrintWriter out = resp.getWriter()) {
                 out.println("<!DOCTYPE html>");
