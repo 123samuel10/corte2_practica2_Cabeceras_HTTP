@@ -14,7 +14,7 @@
 
 
 <form action="listar" method="post">
-    <label>buscar producto</label>
+    <label>Lista productos</label>
     <div>
         <input type="text" name="usarname">
         <input type="submit" value="buscar">
