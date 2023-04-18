@@ -2,10 +2,7 @@ package com.example.practicasegundocorte;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import service.LoginService;
 import service.serviceImpl.LoginServiceImpl;
 
@@ -14,7 +11,7 @@ import java.io.PrintWriter;
 import java.util.Optional;
 
 @WebServlet(name = "LoginServlet",urlPatterns = "/login")
-public class LoginServlet extends HttpServlet {
+public class LoginServletPrincipal extends HttpServlet {
     final static String USERNAME = "admin";
     final static String PASSWORD = "12345";
     @Override
@@ -25,6 +22,8 @@ public class LoginServlet extends HttpServlet {
         if (USERNAME.equals(username) && PASSWORD.equals(password)) {
             Cookie usernameCookie = new Cookie("username", username);
             resp.addCookie(usernameCookie);
+            HttpSession session = req.getSession();
+            session.setAttribute("username", username);
 
 
             resp.setContentType("text/html;charset=UTF-8");
