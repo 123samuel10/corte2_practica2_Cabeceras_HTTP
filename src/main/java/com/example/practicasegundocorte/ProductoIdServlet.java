@@ -7,10 +7,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.Producto;
 import model.Producto2;
+import service.serviceImpl.BuscarIdServiceImpl;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "ProductoIdServlet",urlPatterns = "/buscar")
 public class ProductoIdServlet extends HelloServlet{
@@ -21,10 +24,12 @@ public class ProductoIdServlet extends HelloServlet{
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Producto2 producto=new Producto2("mango","2");
         String buscarId=req.getParameter("id");
-
-            if (producto.getId().equals(buscarId)) {
+        BuscarIdServiceImpl productoD=new BuscarIdServiceImpl();
+        productoD.add("mango","2");
+        productoD.add("pera","3");
+        List<Producto2> productos=productoD.getProductoDos().stream().filter(x->x.getId().equals(buscarId)).collect(Collectors.toList());
+        if (productos.size()==1) {
                 resp.setContentType("text/html;charset=UTF-8");
                 try (PrintWriter out = resp.getWriter()) {
                     out.println("<!DOCTYPE html>");
@@ -35,7 +40,7 @@ public class ProductoIdServlet extends HelloServlet{
                     out.println(" </head>");
                     out.println(" <body>");
                     out.println(" <h1>producto encontrado!</h1>");
-                    out.println(" <h3>el producto con ese codigo es "+producto.getProducto() +"</h3>");
+                    out.println(" <h3>el producto con ese codigo es "+productos.get(0).getProducto() +"</h3>");
                     out.println(" </body>");
                     out.println("</html>");
                 } catch (IOException e) {
@@ -48,9 +53,13 @@ public class ProductoIdServlet extends HelloServlet{
                     throw new RuntimeException(e);
                 }
             }
+
+        }
+
+
 //----------------------------------------------------------------------------------------------------------
 
 
 
     }
-}
+

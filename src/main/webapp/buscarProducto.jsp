@@ -21,8 +21,5 @@
 
 
 </form>
-<form action="buscar" method="get">
-
-</form>
 </body>
 </html>
